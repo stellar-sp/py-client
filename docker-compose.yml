@@ -1,0 +1,12 @@
+version: "3.4"
+services:
+
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      network: host
+#    env_file:
+#      - ./.env
+    volumes:
+      - ./.env:/app/.env
