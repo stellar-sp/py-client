@@ -13,6 +13,7 @@ import json
 import base64
 import hashlib
 from environs import Env
+from stellar_base.memo import TextMemo
 
 if os.path.exists('./.env'):
     env = Env()
@@ -41,7 +42,8 @@ tx = Transaction(
     fee=1000,
     operations=[
         Payment(source=USER_ACCOUNT_ADDRESS, destination=SMART_ACCOUNT_ADDRESS, amount=str(execution_base_fee_in_xlm),
-                asset=Asset("XLM"))]
+                asset=Asset("XLM"))],
+    memo=TextMemo("exec_smart_program_base_fee")
 )
 te = Te(tx=tx, network_id=NETWORK_PASSPHRASE)
 te.sign(Keypair.from_seed(USER_SECRET_KEY))
@@ -164,7 +166,7 @@ for res in workers_results:
 if signer_count >= smart_account_info['thresholds']['med_threshold']:
     final_xdr = sign_envelop(final_xdr, USER_SECRET_KEY)
     final_envelop = Te(tx=TxEnv.TransactionEnvelope.from_xdr(final_xdr))
-    submit_transaction_result = horizon.submit(envelop)
+    submit_transaction_result = horizon.submit(final_envelop.xdr())
     print("transaction submitted to network")
 else:
     print("couldn't collect enough sign for changing state")
