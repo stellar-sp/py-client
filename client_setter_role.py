@@ -32,7 +32,7 @@ operations = [
     Payment(destination=smart_account_keypair.address().decode(), amount='1', asset=Asset("XLM"))
 ]
 
-input_file_hash = upload_file_to_ipfs("./input_file_sample.json")
+input_file_hash = upload_file_to_ipfs("./sample_set_vote_input_file.json")
 
 execution_config = {
     "input_file": input_file_hash,
